@@ -69,9 +69,12 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     setData(next); setLoading(false)
   }, [])
 
-  // load after sign-in, then keep in sync: realtime changes from the other person + refetch when the tab regains focus
+  // load after sign-in, then keep in sync: realtime changes from the other person + refetch when the tab regains focus.
+  // Keyed on the user id, not the session: Supabase re-emits SIGNED_IN with a new session object every time the tab
+  // becomes visible, which would otherwise rerun this and swap the page for "Loading…".
+  const userId = session?.user.id
   useEffect(() => {
-    if (!supabase || !session) return
+    if (!supabase || !userId) return
     reload()
     const ch = supabase.channel('all-changes')
     for (const c of COLLECTIONS) {
@@ -88,7 +91,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     const onFocus = () => reload(true)
     window.addEventListener('focus', onFocus)
     return () => { supabase!.removeChannel(ch); window.removeEventListener('focus', onFocus) }
-  }, [session, reload])
+  }, [userId, reload])
 
   const commitLocal = useCallback((fn: (d: Data) => Data) => {
     setData((d) => { const n = fn(d); if (DEMO_MODE) saveLocal(n); return n })
