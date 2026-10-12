@@ -36,7 +36,7 @@ interface StoreValue {
   upsertMany: <K extends CollectionName>(c: K, rows: Collections[K][]) => Promise<void>
   remove: (c: CollectionName, id: string) => Promise<void>
   replaceAll: (d: Data) => Promise<void>
-  reload: () => Promise<void>
+  reload: (quiet?: boolean) => Promise<void>
   signOut: () => Promise<void>
 }
 
@@ -55,16 +55,18 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     return () => sub.subscription.unsubscribe()
   }, [])
 
-  const reload = useCallback(async () => {
+  // quiet: refetch in the background without swapping the page for "Loading…" (which unmounts the open view)
+  const reload = useCallback(async (quiet = false) => {
     if (!supabase) return
-    setLoading(true)
+    if (!quiet) setLoading(true)
     const next = empty()
     for (const c of COLLECTIONS) {
       const { data: rows, error } = await supabase.from(c).select('*')
       if (error) { setError(`${c}: ${error.message}`); setLoading(false); return }
       ;(next as Record<string, unknown[]>)[c] = rows ?? []
     }
-    setError(null); setData(next); setLoading(false)
+    if (!quiet) setError(null)
+    setData(next); setLoading(false)
   }, [])
 
   // load after sign-in, then keep in sync: realtime changes from the other person + refetch when the tab regains focus
@@ -83,7 +85,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       })
     }
     ch.subscribe()
-    const onFocus = () => reload()
+    const onFocus = () => reload(true)
     window.addEventListener('focus', onFocus)
     return () => { supabase!.removeChannel(ch); window.removeEventListener('focus', onFocus) }
   }, [session, reload])
@@ -101,7 +103,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     })
     if (supabase) {
       const { error } = await supabase.from(c).upsert(rows)
-      if (error) { setError(`Save failed (${c}): ${error.message}`); reload() }
+      if (error) { setError(`Save failed (${c}): ${error.message}`); reload(true) }
     }
   }, [commitLocal, reload])
 
@@ -111,20 +113,23 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     commitLocal((d) => ({ ...d, [c]: (d[c] as { id: string }[]).filter((r) => r.id !== id) }))
     if (supabase) {
       const { error } = await supabase.from(c).delete().eq('id', id)
-      if (error) { setError(`Delete failed (${c}): ${error.message}`); reload() }
+      if (error) { setError(`Delete failed (${c}): ${error.message}`); reload(true) }
     }
   }, [commitLocal, reload])
 
   const replaceAll = useCallback(async (d: Data) => {
     if (!supabase) { saveLocal(d); setData(d); return }
+    let failed = ''
     for (const c of COLLECTIONS) {
       const rows = (d[c] ?? []) as { id: string }[]
       if (rows.length) {
         const { error } = await supabase.from(c).upsert(rows)
-        if (error) { setError(`Import failed (${c}): ${error.message}`); break }
+        if (error) { failed = `${c}: ${error.message}`; break }
       }
     }
-    await reload()
+    if (failed) setError(`Import failed (${failed})`)
+    await reload(true)
+    if (failed) throw new Error(failed)
   }, [reload])
 
   const signOut = useCallback(async () => { if (supabase) await supabase.auth.signOut() }, [])
