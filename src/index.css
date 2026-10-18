@@ -262,3 +262,14 @@ input.num { width: 6.5rem; }
   .task { flex-wrap: wrap; }
   h1 { font-size: 1.35rem; }
 }
+
+/* how to post */
+.steps { margin: 0; padding-left: 1.3rem; display: grid; gap: .4rem; font-size: .9rem; line-height: 1.4; }
+.guides { margin-top: .75rem; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
+.howto summary { cursor: pointer; list-style: none; }
+.howto summary::-webkit-details-marker { display: none; }
+.howto summary h3 { display: inline; }
+.howto summary::after { content: ' ▸'; color: var(--muted); }
+.howto[open] summary::after { content: ' ▾'; }
+.howto[open] summary { margin-bottom: .5rem; }
+.editor-side .steps { font-size: .85rem; }

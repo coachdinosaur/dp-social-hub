@@ -8,6 +8,7 @@ import { TasksView } from './views/Tasks'
 import { HashtagsView } from './views/Hashtags'
 import { TimingView } from './views/Timing'
 import { IdeasView } from './views/Ideas'
+import { HowToView } from './views/HowTo'
 import { SettingsView } from './views/Settings'
 import { Login } from './views/Login'
 
@@ -19,6 +20,7 @@ const TABS = [
   { id: 'hashtags', label: 'Hashtags', icon: '#️⃣' },
   { id: 'timing', label: 'Best times', icon: '⏰' },
   { id: 'ideas', label: 'Ideas', icon: '💡' },
+  { id: 'howto', label: 'How to post', icon: '📖' },
   { id: 'settings', label: 'Settings', icon: '⚙️' },
 ] as const
 type TabId = (typeof TABS)[number]['id']
@@ -67,6 +69,7 @@ export default function App() {
             {tab === 'hashtags' && <HashtagsView />}
             {tab === 'timing' && <TimingView />}
             {tab === 'ideas' && <IdeasView />}
+            {tab === 'howto' && <HowToView />}
             {tab === 'settings' && <SettingsView />}
           </>
         )}

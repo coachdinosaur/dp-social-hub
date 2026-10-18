@@ -5,6 +5,8 @@ import { nowIso, uid, useStore } from '../store'
 import type { Metrics, Platform, Post, Task } from '../types'
 import { checkCaption, composeCaption, fmtDateTime, fromLocalInput, inBestWindow, parseTags, suggestSlots, toLocalInput, todayKey, addDays } from '../utils'
 import { CopyButton, Modal, PlatformBadge } from '../components/ui'
+import { guideFor } from '../howto'
+import { GuideSteps } from './HowTo'
 
 export function newPost(platform: Platform, content_id: string | null = null): Post {
   const info = PLATFORMS[platform]
@@ -194,6 +196,14 @@ export function PostEditor({ post, onClose }: { post: Post; onClose: () => void 
               <input value={newItem} placeholder="Add item" onChange={(e) => setNewItem(e.target.value)} />
               <button className="btn small">Add</button>
             </form>
+          </section>
+
+          <section>
+            <details className="howto">
+              <summary><h3>How to post this on {info.label}</h3></summary>
+              <GuideSteps guide={guideFor(p.platform, p.format)} />
+              <p className="hint">Then click Mark as posted. All platforms: How to post (menu).</p>
+            </details>
           </section>
 
           <section>
