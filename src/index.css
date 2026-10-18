@@ -273,3 +273,5 @@ input.num { width: 6.5rem; }
 .howto[open] summary::after { content: ' ▾'; }
 .howto[open] summary { margin-bottom: .5rem; }
 .editor-side .steps { font-size: .85rem; }
+.copy-row input { flex: 1 1 auto; min-width: 0; }
+.copy-row .btn { flex: none; }

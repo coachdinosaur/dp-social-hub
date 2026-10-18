@@ -30,6 +30,8 @@ export function PostEditor({ post, onClose }: { post: Post; onClose: () => void 
   const slots = suggestSlots(p.platform, taken)
   const sets = data.hashtag_sets.filter((s) => s.platform === 'all' || s.platform === p.platform)
   const done = p.checklist.filter((c) => c.done).length
+  // links mentioned in the notes (e.g. the YouTube link for the first comment), each with its own Copy button
+  const noteLinks = [...new Set((p.notes.match(/https?:\/\/[^\s)]+/g) ?? []).map((u) => u.replace(/[.,;·]+$/, '')))]
 
   function changePlatform(platform: Platform) {
     const i = PLATFORMS[platform]
@@ -133,10 +135,13 @@ export function PostEditor({ post, onClose }: { post: Post; onClose: () => void 
           </div>
 
           {info.titleLimit !== undefined && (
-            <label className="field">
+            <div className="field">
               <span>Title</span>
-              <input value={p.title} maxLength={info.titleLimit + 50} onChange={(e) => set({ title: e.target.value })} />
-            </label>
+              <div className="row copy-row">
+                <input aria-label="Title" value={p.title} maxLength={info.titleLimit + 50} onChange={(e) => set({ title: e.target.value })} />
+                <CopyButton text={p.title} />
+              </div>
+            </div>
           )}
 
           <label className="field">
@@ -176,6 +181,12 @@ export function PostEditor({ post, onClose }: { post: Post; onClose: () => void 
             <span>Notes</span>
             <textarea rows={2} value={p.notes} onChange={(e) => set({ notes: e.target.value })} />
           </label>
+          {noteLinks.length > 0 && (
+            <div className="chips">
+              <span className="muted">Links in notes:</span>
+              {noteLinks.map((u) => <CopyButton key={u} text={u} label={`Copy ${u.replace(/^https?:\/\/(www\.)?/, '').slice(0, 32)}`} />)}
+            </div>
+          )}
         </div>
 
         <aside className="editor-side">
