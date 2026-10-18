@@ -23,7 +23,7 @@ export const AFTER = [
 ]
 
 export const ALWAYS = [
-  'AI label on, every time: the voice and Kuya JB are AI.',
+  'AI label on wherever the app offers it: the voice and Kuya JB are AI. Where there is no AI label (e.g. Meta Business Suite), end the caption with "AI voice ang gamit sa video na \'to."',
   'No extra auto-captions or music: the English captions and the music are already in the video.',
   'Never leave a black first frame as the cover: pick the frame with the title, or upload the cover image.',
 ]
@@ -94,22 +94,26 @@ export const GUIDES: Record<Platform, Guide[]> = {
         'Share.',
         'Check the bio link goes to the YouTube channel.',
       ],
+      note: 'A reel can also go to Instagram together with Facebook from Meta Business Suite → Create reel (see Facebook · Reel). Then mark both posts as posted.',
     },
   ],
   facebook: [
     {
-      format: 'Reel', where: 'Meta Business Suite, from the Digital Profits Ph Page on facebook.com',
+      format: 'Reel', where: 'Meta Business Suite → Create reel (posts as the Page, to Facebook and Instagram together)',
       steps: [
-        'Open the Digital Profits Ph Page → All tab → in the "Manage Page on Meta Business Suite" box, click Create post. (Or Meta Business Suite → Content → Create reel.)',
-        'Post to: check it says Digital Profits Ph. If Instagram is listed and ticked, untick it: Instagram gets its own caption.',
-        'Add photo/video → the reel file. If the window has a Reel option, use it.',
-        'Text: paste the Copy text. Leave captions and music off: they are already in the video.',
-        'Cover / thumbnail, if offered: upload the cover image or pick the frame with the title.',
-        'AI label: on, if offered.',
-        'Publish.',
-        'Comment as the Page: on the reel\'s comment box, click the small profile picture and choose Digital Profits Ph (or use Business Suite → Inbox → Comments). Paste the YouTube link from the Notes, then pin the comment.',
+        'Open Meta Business Suite: on the Digital Profits Ph Page, click Meta Business Suite in the left panel. (Or All tab → "Manage Page on Meta Business Suite" → Create post, then close that window with X.)',
+        'On the Business Suite page, click Create reel at the top right, next to Export data. Not Create post: its window has no video upload.',
+        'Share to: tick Digital Profits Ph (Facebook) and digitalprofitsclickersph (Instagram) to post on both at once.',
+        'Add video → Upload from desktop → the reel file (Downloads).',
+        'Reel details → Text: paste one caption that works on both, saying "link sa comments / bio". Leave "Customize post for Facebook and Instagram" off. Ignore the hashtag suggestions that pop up: click an empty spot.',
+        'Next. Thumbnail: upload the cover image or pick the frame with the title.',
+        'Closed captions: untick "Auto-generated captions": the English captions are already in the video. Remixing: leave as is.',
+        'AI label: Business Suite usually doesn\'t offer it, so end the caption with "AI voice ang gamit sa video na \'to."',
+        'Share now → Share / Publish.',
+        'Facebook: comment as the Page with the YouTube link from the Notes (pick Digital Profits Ph with the small profile picture by the comment box, or Business Suite → Inbox → Comments) → pin it. Instagram needs no comment: the caption says "bio".',
+        'In the Hub: Mark as posted on both the Facebook and the Instagram post.',
       ],
-      note: 'Use Business Suite, not Facebook\'s own Create menu (⠿ → Create → Reel): that posts as whichever profile you are on, which can be your personal account. Facebook doesn\'t share to Instagram by itself, so post Instagram separately.',
+      note: 'Don\'t use Facebook\'s own Create menu (⠿ → Create → Reel): it posts as whichever profile you are on, and on our accounts that is a personal profile.',
     },
     {
       format: 'Video', where: 'Meta Business Suite, from the Digital Profits Ph Page on facebook.com',
@@ -123,6 +127,7 @@ export const GUIDES: Record<Platform, Guide[]> = {
         'Publish (or Schedule).',
         'Comment as the Page (pick Digital Profits Ph by the comment box) with the YouTube link from the Notes → pin it.',
       ],
+      note: 'Not tried yet on our accounts: on Oct 18 the Create post window showed no media upload. If yours has none either, look for a Create video option on the Business Suite page, or send a screenshot.',
     },
     {
       format: 'Post', where: 'Meta Business Suite, from the Digital Profits Ph Page on facebook.com',
@@ -133,6 +138,7 @@ export const GUIDES: Record<Platform, Guide[]> = {
         'Publish.',
         'If the Notes have a link: comment as the Page with it → pin it.',
       ],
+      note: 'Photo posts are not tried yet on our accounts: on Oct 18 the Create post window showed no media upload. If you can\'t add the image, send a screenshot.',
     },
   ],
   x: [
